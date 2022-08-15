@@ -26,23 +26,26 @@ const options = {
 flatpickr(input, options);
 
 function runCountdown() {
+  input.disabled = true;
   startBtn.disabled = true;
+  let chosenDate = input._flatpickr.selectedDates[0];
+  let currentDate = new Date();
+  let countdownDate = chosenDate - currentDate;
   const timerId = setInterval(() => {
-    let chosenDate = input._flatpickr.selectedDates[0];
-    let currentDate = new Date();
-    let countdownDate = chosenDate - currentDate;
+    console.log('setInterval');
+    currentDate = new Date();
+    countdownDate = chosenDate - currentDate;
     const { days, hours, minutes, seconds } = convertMs(countdownDate);
     dataDays.textContent = days < 10 ? `0${days}` : days;
     dataHours.textContent = hours < 10 ? `0${hours}` : hours;
     dataMinutes.textContent = minutes < 10 ? `0${minutes}` : minutes;
     dataSeconds.textContent = seconds < 10 ? `0${seconds}` : seconds;
-
-    if (countdownDate <= 0) {
-      clearInterval(this.intervalId);
-      return;
-    }
   }, 1000);
-  return timerId;
+  setTimeout(() => {
+    console.log('setTimeout');
+    input.disabled = false;
+    clearInterval(timerId);
+  }, countdownDate);
 }
 
 function addLeadingZero(value) {
